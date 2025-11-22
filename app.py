@@ -10,7 +10,7 @@ from utils import safe_filename
 
 st.set_page_config(page_title="URL → Notes (Advanced)", layout="wide")
 
-st.title("📄 URL → Notes (Advanced)")
+st.title("Students HandsOn Note Maker")
 st.markdown(
     "Paste a URL and generate: clean notes, bullet summary, key concepts, definitions, Q&A, MCQs, flashcards, and a downloadable PDF. Includes a chatbot to ask follow-ups about the page."
 )
