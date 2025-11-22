@@ -10,7 +10,7 @@ def extract_text_from_url(url: str) -> Tuple[str, str]:
     Returns (text, title)
     """
     # Try trafilatura (best extraction)
-    downloaded = trafilatura.fetch_url(url, request_timeout=20)
+    downloaded = trafilatura.fetch_url(url)
     if downloaded:
         result = trafilatura.extract(downloaded, include_comments=False, include_tables=False, favor_precision=True)
         # trafilatura doesn't return title separately; parse it from html if possible
