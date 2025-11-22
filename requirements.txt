@@ -1,7 +1,0 @@
-streamlit>=1.20
-trafilatura
-beautifulsoup4
-requests
-openai
-fpdf
-pandas
