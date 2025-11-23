@@ -1,7 +1,7 @@
-streamlit
-requests
+streamlit>=1.20
+trafilatura
 beautifulsoup4
-transformers==4.36.2
-torch
-sentencepiece
-reportlab
+requests
+openai
+fpdf
+pandas
