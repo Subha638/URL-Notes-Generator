@@ -1,49 +1,39 @@
 import streamlit as st
-import os
 import requests
+from bs4 import BeautifulSoup
+from summarizer import generate_notes
+from pdf_utils import create_pdf
 
-# Load API key from environment variable (must be set in Streamlit Cloud dashboard)
-API_KEY = os.getenv("OPENAI_API_KEY")
+st.title("🔗 URL → Notes Generator (No API Key Needed)")
 
-if not API_KEY:
-    st.error("❌ API key missing! Set OPENAI_API_KEY in Streamlit Secrets.")
-    st.stop()
-
-API_URL = "https://api.openai.com/v1/chat/completions"
-
-def generate_notes_from_url(url):
-    prompt = f"Extract clear, structured notes from the following URL:\n{url}\n\nProvide bullet points, headings, and summary."
-
-    headers = {
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    }
-
-    data = {
-        "model": "gpt-4o-mini",
-        "messages": [
-            {"role": "user", "content": prompt}
-        ]
-    }
-
-    response = requests.post(API_URL, headers=headers, json=data)
-
-    if response.status_code != 200:
-        return f"❌ Error: {response.text}"
-
-    result = response.json()
-    notes = result["choices"][0]["message"]["content"]
-    return notes
-
-st.title("URL → Smart Notes Extractor")
-st.write("Paste any article URL to generate clean, easy-to-read notes.")
-
-url_input = st.text_input("Enter URL")
+url = st.text_input("Enter any article URL:")
 
 if st.button("Generate Notes"):
-    if url_input:
-        with st.spinner("Generating notes..."):
-            output = generate_notes_from_url(url_input)
-            st.write(output)
+    if url.strip() == "":
+        st.error("Please enter a valid URL")
     else:
-        st.warning("Please enter a URL!")
+        try:
+            response = requests.get(url)
+            soup = BeautifulSoup(response.text, "html.parser")
+
+            # Extract article text
+            paragraphs = soup.find_all("p")
+            article = " ".join([p.text for p in paragraphs])
+
+            if len(article) < 200:
+                st.error("Unable to extract enough content from this URL.")
+            else:
+                notes = generate_notes(article)
+
+                st.subheader("📝 Extracted Notes")
+                st.write(notes)
+
+                # Save PDF
+                pdf_path = "notes.pdf"
+                create_pdf(notes, pdf_path)
+
+                with open(pdf_path, "rb") as f:
+                    st.download_button("📥 Download Notes as PDF", f, file_name="notes.pdf")
+
+        except Exception as e:
+            st.error(f"Error: {e}")
