@@ -7,7 +7,7 @@ import os
 from utils import extract_text_from_url, generate_notes_with_openai, generate_notes_fallback
 from utils import generate_faqs_with_openai, generate_faqs_fallback
 from utils import generate_mcqs_with_openai, generate_mcqs_fallback
-from pdf_utils import create_pdf_bytes
+
 
 st.set_page_config(page_title="URL → Smart Notes", layout="wide")
 
@@ -83,24 +83,7 @@ with col1:
                         st.write(f"**Answer:** {mcq['answer']}")
                     st.markdown("---")
 
-                    # Provide PDF download
-                    pdf_bytes = create_pdf_bytes(
-                        title=f"Notes - {url}",
-                        url=url,
-                        summary=notes["summary"],
-                        bullets=notes["bullets"],
-                        faqs=faqs,
-                        mcqs=mcqs
-                    )
-                    st.download_button(
-                        label="Download study pack (PDF)",
-                        data=pdf_bytes,
-                        file_name="study_pack.pdf",
-                        mime="application/pdf"
-                    )
-    else:
-        st.info("Paste a URL and click **Generate Notes** to begin.")
-
+                   
 with col2:
     st.header("Preview / Quick tools")
     st.write("Useful quick actions:")
