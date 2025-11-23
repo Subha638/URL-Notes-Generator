@@ -1,7 +1,8 @@
-import os
+import streamlit as st
 from openai import OpenAI
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Read API key safely from Streamlit Secrets
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 def ask_model(prompt):
     response = client.chat.completions.create(
@@ -13,8 +14,14 @@ def ask_model(prompt):
 
 def generate_notes(text):
     prompt = f"""
-    Convert the following content into clean structured notes with summary,
-    key points, definitions, and bullet points.
+    Convert this content into clean, structured study notes.
+
+    Include:
+    - Summary
+    - Key points
+    - Definitions
+    - Important concepts
+    - Bullet points
 
     Content:
     {text}
@@ -24,7 +31,7 @@ def generate_notes(text):
 
 def generate_faq(text):
     prompt = f"""
-    Generate 8 FAQs and answers based on the given text:
+    Generate 8 FAQs with detailed answers based on the content:
 
     {text}
     """
@@ -33,9 +40,10 @@ def generate_faq(text):
 
 def generate_mcq(text):
     prompt = f"""
-    Create 10 MCQs with 4 options each, and provide correct answers at the end.
+    Generate 10 MCQs with 4 options each based on the content.
+    Add correct answers at the end.
 
-    Text:
+    Content:
     {text}
     """
     return ask_model(prompt)
