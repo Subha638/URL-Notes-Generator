@@ -1,16 +1,15 @@
-# 📘 AI URL → Notes Generator (Advanced)
+# 📘 AI URL → Notes Generator
 
-A Streamlit app that converts any webpage URL into:
+Generates:
+- Clean Notes  
+- FAQs  
+- MCQs  
+- PDF Export  
 
-✔ Clean Notes  
-✔ FAQs  
-✔ MCQs  
-✔ PDF Export  
+## 🚀 How It Works
+1. Paste any URL  
+2. AI extracts text  
+3. Generates structured notes  
+4. Export as PDF  
 
-## 🚀 Features
-- Extracts text from any URL
-- Uses AI to generate summaries & study material
-- User-friendly UI
-- Exports everything into a PDF
-
-## 📂 Project Structure
+## ▶️ Run locally
