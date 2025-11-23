@@ -4,9 +4,9 @@ from bs4 import BeautifulSoup
 from summarizer import generate_notes
 from pdf_utils import create_pdf
 
-st.title("🔗 URL → Notes Generator (No API Key)")
+st.title("🔗 URL → Detailed Notes Generator (No API Key)")
 
-url = st.text_input("Enter article URL")
+url = st.text_input("Enter Article URL")
 
 if st.button("Generate Notes"):
     try:
@@ -19,9 +19,10 @@ if st.button("Generate Notes"):
         if len(article) < 150:
             st.error("Could not extract enough readable text from this URL.")
         else:
+            st.info("⏳ Generating detailed notes... Please wait.")
             notes = generate_notes(article)
 
-            st.subheader("📝 Notes")
+            st.subheader("📝 Generated Notes:")
             st.write(notes)
 
             pdf_path = "notes.pdf"
@@ -29,7 +30,7 @@ if st.button("Generate Notes"):
 
             with open(pdf_path, "rb") as f:
                 st.download_button(
-                    label="📥 Download PDF",
+                    label="📥 Download Notes as PDF",
                     data=f,
                     file_name="notes.pdf",
                     mime="application/pdf"
