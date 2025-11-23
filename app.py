@@ -104,35 +104,3 @@ if generate and url.strip():
                 mime="application/pdf",
             )
 
-# Chatbot panel — ask questions about the article
-st.markdown("---")
-st.header("🤖 Ask about the article (Chatbot)")
-col1, col2 = st.columns([3, 1])
-with col1:
-    user_q = st.text_input("Ask a question about the last generated article (or paste a short excerpt).", key="chat_input")
-with col2:
-    ask_btn = st.button("Ask")
-
-if ask_btn and user_q.strip():
-    if "latest_result" not in st.session_state:
-        st.error("Generate notes first from a URL so the chatbot has context.")
-    else:
-        with st.spinner("Querying LLM for an answer..."):
-            from summarizer import answer_question_about_doc
-            answer = answer_question_about_doc(
-                question=user_q,
-                doc_text=st.session_state.latest_result.get("raw_text", "") or "",
-                model=model_choice,
-                max_tokens=800
-            )
-        st.session_state.chat_history.append({"q": user_q, "a": answer})
-        st.experimental_rerun()
-
-if st.session_state.chat_history:
-    st.subheader("Chat history")
-    for item in reversed(st.session_state.chat_history[-6:]):
-        st.markdown(f"**Q:** {item['q']}")
-        st.markdown(f"**A:** {item['a']}")
-
-st.markdown("---")
-st.caption("Built for hackathons & learning. Set OPENAI_API_KEY for full LLM capabilities.")
