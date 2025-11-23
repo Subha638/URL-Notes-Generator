@@ -1,20 +1,28 @@
-# URL → Notes (Advanced) — Streamlit App
+# URL → Smart Notes (Streamlit MVP)
 
-**Features**
-- Paste a URL → extract article text (trafilatura / BeautifulSoup)
-- Generate: Summary, Bulleted notes, Key concepts, Definitions, Q&A, MCQs, Flashcards
-- Chatbot to ask follow-ups about the generated document
-- Download notes as PDF
-- Streamlit deployment ready
+**What it does:** Paste a webpage URL and the app extracts the content and auto-generates:
+- Concise summary
+- Bullet-point notes
+- FAQs
+- Multiple-choice questions (MCQs)
+- Downloadable PDF study pack
 
-## Requirements
-- Python 3.9+
-- `OPENAI_API_KEY` environment variable (for full LLM features). Without it a simple fallback summarizer will run.
+**Why:** Great for students, researchers, and hackathons.
 
-## Quick Setup (local)
+---
+
+## Features
+- Uses `trafilatura` and `BeautifulSoup` for content extraction.
+- Uses **OpenAI** (if `OPENAI_API_KEY` is provided) to generate high-quality notes, FAQs, and MCQs.
+- Fallback generators using `gensim` and heuristics if no OpenAI key.
+- Streamlit UI with PDF download.
+
+---
+
+## Setup (local)
+1. Clone repo
+2. Create virtual environment and install:
 ```bash
 python -m venv venv
-source venv/bin/activate     # Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows: venv\\Scripts\\activate
 pip install -r requirements.txt
-export OPENAI_API_KEY="sk-..."
-streamlit run app.py
