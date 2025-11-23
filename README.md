@@ -1,15 +1,20 @@
-# 📘 AI URL → Notes Generator
+# URL → Notes (Advanced) — Streamlit App
 
-Generates:
-- Clean Notes  
-- FAQs  
-- MCQs  
-- PDF Export  
+**Features**
+- Paste a URL → extract article text (trafilatura / BeautifulSoup)
+- Generate: Summary, Bulleted notes, Key concepts, Definitions, Q&A, MCQs, Flashcards
+- Chatbot to ask follow-ups about the generated document
+- Download notes as PDF
+- Streamlit deployment ready
 
-## 🚀 How It Works
-1. Paste any URL  
-2. AI extracts text  
-3. Generates structured notes  
-4. Export as PDF  
+## Requirements
+- Python 3.9+
+- `OPENAI_API_KEY` environment variable (for full LLM features). Without it a simple fallback summarizer will run.
 
-## ▶️ Run locally
+## Quick Setup (local)
+```bash
+python -m venv venv
+source venv/bin/activate     # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+export OPENAI_API_KEY="sk-..."
+streamlit run app.py
