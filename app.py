@@ -8,20 +8,20 @@ import uuid
 st.set_page_config(page_title="AI URL-to-Notes Generator", layout="wide")
 
 st.title("📘 AI URL → Clean Notes Generator (Advanced)")
-st.write("Paste any webpage link to generate notes, summary, FAQs, and MCQs.")
+st.write("Paste a URL to generate clean notes, FAQs, MCQs, and download as PDF.")
 
-url = st.text_input("Enter URL:")
+url = st.text_input("Enter the URL:")
 
 if st.button("Generate Notes"):
-    with st.spinner("Extracting content..."):
+    with st.spinner("Extracting text from webpage..."):
         article = extract_text_from_url(url)
 
     if not article:
         st.error("Could not extract content. Try another URL.")
     else:
-        st.success("Content extracted successfully!")
+        st.success("Text extracted successfully!")
 
-        with st.spinner("Generating structured study notes..."):
+        with st.spinner("Generating AI notes..."):
             notes = generate_notes(article)
             faq = generate_faq(article)
             mcq = generate_mcq(article)
@@ -40,6 +40,6 @@ if st.button("Generate Notes"):
         create_pdf(notes, faq, mcq, filename)
 
         with open(filename, "rb") as f:
-            st.download_button("Download PDF", f, file_name="AI_Notes.pdf")
+            st.download_button("Download PDF", f, "AI_Notes.pdf")
 
         os.remove(filename)
