@@ -1,7 +1,7 @@
 streamlit
 requests
 beautifulsoup4
-transformers
+transformers==4.36.2
 torch
 sentencepiece
 reportlab
