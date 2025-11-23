@@ -1,20 +1,27 @@
 import streamlit as st
 from openai import OpenAI
 
-# Read API key safely from Streamlit Secrets
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+# Load API key from Streamlit Secrets
+api_key = st.secrets.get("OPENAI_API_KEY")
+
+# Fail-safe check
+if not api_key:
+    raise ValueError("❌ OPENAI_API_KEY is missing in Streamlit Secrets!")
+
+client = OpenAI(api_key=api_key)
 
 def ask_model(prompt):
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": prompt}]
+        model="gpt-4o-mini",   # ✔ This model exists and works
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=500
     )
     return response.choices[0].message.content
 
 
 def generate_notes(text):
     prompt = f"""
-    Convert this content into clean, structured study notes.
+    Convert the following content into clean, structured study notes.
 
     Include:
     - Summary
