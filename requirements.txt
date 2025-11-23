@@ -1,4 +1,7 @@
 streamlit
-trafilatura
-openai
-fpdf
+requests
+beautifulsoup4
+transformers
+torch
+sentencepiece
+reportlab
