@@ -1,9 +1,10 @@
-import openai
+import os
+from openai import OpenAI
 
-openai.api_key = "YOUR_OPENAI_KEY"
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def ask_model(prompt):
-    response = openai.chat.completions.create(
+    response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}]
     )
@@ -12,18 +13,12 @@ def ask_model(prompt):
 
 def generate_notes(text):
     prompt = f"""
-    Convert the following content into **clean, structured notes** with headings and bullet points.
+    Convert the following content into clean structured notes with summary,
+    key points, definitions, and bullet points.
 
     Content:
     {text}
-
-    Notes must include:
-    - Summary
-    - Important points
-    - Definitions
-    - Key takeaways
     """
-
     return ask_model(prompt)
 
 
@@ -33,16 +28,14 @@ def generate_faq(text):
 
     {text}
     """
-
     return ask_model(prompt)
 
 
 def generate_mcq(text):
     prompt = f"""
-    Create 10 MCQs with 4 options each and provide correct answers at the end.
+    Create 10 MCQs with 4 options each, and provide correct answers at the end.
 
     Text:
     {text}
     """
-
     return ask_model(prompt)
