@@ -1,7 +1,6 @@
 __pycache__/
-.vscode/
-.env
 data/
-*.pyc
-.venv/
+.env
+.vscode/
 venv/
+secrets.toml
