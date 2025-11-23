@@ -1,45 +1,49 @@
 import streamlit as st
-from scraper import extract_text_from_url
-from notes_generator import generate_notes, generate_faq, generate_mcq
-from pdf_export import create_pdf
 import os
-import uuid
+import requests
 
-st.set_page_config(page_title="AI URL-to-Notes Generator", layout="wide")
+# Load API key from environment variable (must be set in Streamlit Cloud dashboard)
+API_KEY = os.getenv("OPENAI_API_KEY")
 
-st.title("📘 AI URL → Clean Notes Generator (Advanced)")
-st.write("Paste a URL to generate clean notes, FAQs, MCQs, and download as PDF.")
+if not API_KEY:
+    st.error("❌ API key missing! Set OPENAI_API_KEY in Streamlit Secrets.")
+    st.stop()
 
-url = st.text_input("Enter the URL:")
+API_URL = "https://api.openai.com/v1/chat/completions"
+
+def generate_notes_from_url(url):
+    prompt = f"Extract clear, structured notes from the following URL:\n{url}\n\nProvide bullet points, headings, and summary."
+
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    data = {
+        "model": "gpt-4o-mini",
+        "messages": [
+            {"role": "user", "content": prompt}
+        ]
+    }
+
+    response = requests.post(API_URL, headers=headers, json=data)
+
+    if response.status_code != 200:
+        return f"❌ Error: {response.text}"
+
+    result = response.json()
+    notes = result["choices"][0]["message"]["content"]
+    return notes
+
+st.title("URL → Smart Notes Extractor")
+st.write("Paste any article URL to generate clean, easy-to-read notes.")
+
+url_input = st.text_input("Enter URL")
 
 if st.button("Generate Notes"):
-    with st.spinner("Extracting text from webpage..."):
-        article = extract_text_from_url(url)
-
-    if not article:
-        st.error("Could not extract content. Try another URL.")
+    if url_input:
+        with st.spinner("Generating notes..."):
+            output = generate_notes_from_url(url_input)
+            st.write(output)
     else:
-        st.success("Text extracted successfully!")
-
-        with st.spinner("Generating AI notes..."):
-            notes = generate_notes(article)
-            faq = generate_faq(article)
-            mcq = generate_mcq(article)
-
-        st.subheader("📄 Clean Notes")
-        st.write(notes)
-
-        st.subheader("❓ FAQs")
-        st.write(faq)
-
-        st.subheader("📝 MCQs")
-        st.write(mcq)
-
-        # PDF Export
-        filename = f"notes_{uuid.uuid4().hex}.pdf"
-        create_pdf(notes, faq, mcq, filename)
-
-        with open(filename, "rb") as f:
-            st.download_button("Download PDF", f, "AI_Notes.pdf")
-
-        os.remove(filename)
+        st.warning("Please enter a URL!")
